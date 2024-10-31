@@ -7,6 +7,6 @@ router.get("/orders", verify, getSingleOrder);
 router.post("/orders", verify, postOrder);
 router.put("/orders/:id", verifyAndAuth, updateOrder);
 router.delete("/orders/:id", verifyAndAuth, deleteOrder);
-router.put("/order-status/:id", verifyAndAuth, updateStatus);
+router.put("/order-status/:id", verifyAdmin, updateStatus);
 
 module.exports = router;

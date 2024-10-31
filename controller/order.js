@@ -2,10 +2,10 @@ const Model = require("../model/order");
 
 const getOrder = async (req, res) => {
     try {
-        const orders = await Model.find();
+        const orders = await Model.find().populate({path: "products.productId"});
         // validate order
         if (!orders) {
-            return res.status(404).json({success: false, error: "orders not found"});
+            return res.status(404).json({success: false, error: "something went wrong"});
         }
         res.status(200).json({success: true, ...orders});
     } catch (err) {
@@ -18,7 +18,7 @@ const getSingleOrder = async (req, res) => {
     const {userId} = req.query;
 
     try {
-        const order = await Model.findOne({userId});
+        const order = await Model.findOne({userId}).populate({path: "products.productId"});
         // validate order
         if (!order) {
             return res.status(404).json({success: false, error: "order not found"});
@@ -43,7 +43,7 @@ const postOrder = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
-    const {...orders} = req.body;
+    const {status, ...orders} = req.body;
     const {id} = req.params;
     try{
         const order = await Model.findById(id);
@@ -82,7 +82,7 @@ const updateStatus = async (req, res) => {
             return res.status(404).json({success: false, error: "order not found"});
         }
         await Model.findByIdAndUpdate(id, {status: "completed"}, {new: true});
-        res.status(200).json({success: true, message: "order has been completed"});
+        res.status(200).json({success: true, order});
     } catch(err) {
         res.status(500).json(err.message);
     }

@@ -48,7 +48,6 @@ const getAllProduct = async (req, res) => {
     let filter = {}
     if (req.query.category) {
         filter = {category: req.query.category};
-        console.log(filter)
     }
     try {
         const products = await Model.find(filter).select("-__v").populate({path: "creatorId", select: "username email"})
