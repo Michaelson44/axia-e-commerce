@@ -45,11 +45,16 @@ const postOrder = async (req, res) => {
 const updateOrder = async (req, res) => {
     const {status, ...orders} = req.body;
     const {id} = req.params;
+    const userId = req.user.id;
     try{
         const order = await Model.findById(id);
         // validate order
         if (!order) {
             return res.status(404).json({success: false, error: "order not found"});
+        }
+        // validate user
+        if (order.userId !== userId) {
+            return res.status(321).json({success: false, error: "you are not authorized for that"})
         }
         await Model.findByIdAndUpdate(id, {...orders}, {new: true});
         res.status(200).json({succcess: true, message: "order has been updated"});
@@ -60,11 +65,16 @@ const updateOrder = async (req, res) => {
 
 const deleteOrder = async (req, res) => {
     const {id} = req.params;
+    const userId = req.user.id;
     try {
         const order = await Model.findById(id);
         // validate order
         if (!order) {
             return res.status(404).json({success: false, error: "order not found"});
+        }
+        // validate user
+        if (order.userId !== userId) {
+            return res.status(321).json({success: false, error: "you are not authorized for that"})
         }
         await Model.findByIdAndDelete(id);
         res.status(200).json({success: true, message: "order has been deleted"});
@@ -75,11 +85,16 @@ const deleteOrder = async (req, res) => {
 
 const updateStatus = async (req, res) => {
     const {id} = req.params;
+    const userId = req.user.id;
     try {
         // validate order
         const order = await Model.findById(id);
         if (!order) {
             return res.status(404).json({success: false, error: "order not found"});
+        }
+        // validate user
+        if (order.userId !== userId) {
+            return res.status(321).json({success: false, error: "you are not authorized for that"})
         }
         await Model.findByIdAndUpdate(id, {status: "completed"}, {new: true});
         res.status(200).json({success: true, order});

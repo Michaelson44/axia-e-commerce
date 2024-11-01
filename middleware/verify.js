@@ -17,7 +17,7 @@ const verify = (req, res, next) => {
 
 const verifyAndAuth = (req, res, next) => {
     verify(req, res, () => {
-        if (req.user.id === req.params.id) {
+        if (req.user.id === req.params.id || req.user.isAdmin) {
             next();
         } else {
             return res.status(400).json({error: "you are not authorized to do that"});

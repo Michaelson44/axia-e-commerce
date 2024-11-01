@@ -31,6 +31,10 @@ const updateCart = async (req, res) => {
         if (!cart) {
             return res.status(404).json({success: false, error: "cart not found"});
         }
+        // validate user
+        if (cart.userId !== userId) {
+            return res.status(321).json({success: false, error: "you are not authorized for that"})
+        }
         await cartModel.findByIdAndUpdate(id, req.body, {new: true});
         res.status(200).json({success: true, message: "cart has been updated"});
     } catch (err) {
@@ -40,11 +44,16 @@ const updateCart = async (req, res) => {
 
 const deleteCart = async (req, res) => {
     const {id} = req.params;
+    const userId = req.user.id;
     try {
         // validate cart
         const cart = await cartModel.findById(id);
         if (!cart) {
             return res.status(404).json({success: false, error: "cart not found"});
+        }
+        // validate user
+        if (cart.userId !== userId) {
+            return res.status(321).json({success: false, error: "you are not authorized for that"})
         }
         await cartModel.findByIdAndDelete(id);
         res.status(200).json({success: true, message: "cart deleted"});
