@@ -64,7 +64,7 @@ const getCategories = async (req, res) => {
 }
 
 const getCategory = async (req, res) => {
-    const {id} = req.body
+    const {id} = req.params;
     try {
         const category = await categoryModel.findById(id);
         res.status(200).json(category)
