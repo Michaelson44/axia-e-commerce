@@ -21,7 +21,7 @@ const postCategory = async (req, res) => {
 }
 
 const updateCategory = async (req, res) => {
-    const {name} = req.body;
+    const {name} = req.params;
 
     try {
         // validate category
