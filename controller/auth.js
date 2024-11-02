@@ -60,7 +60,7 @@ const oauth = async (req, res) => {
             .status(200).json({message: "user has been logged in"});
         }
         // create new user
-        const newUser = new userModel({username, email});
+        const newUser = new userModel({username, email, credentialsAccount: false});
         const savedUser = await newUser.save();
         const token = jwt.sign({id: savedUser.id, isAdmin: savedUser.isAdmin});
         res.cookie("token", token)

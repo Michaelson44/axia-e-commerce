@@ -50,7 +50,8 @@ const getAllProduct = async (req, res) => {
         filter = {category: req.query.category};
     }
     try {
-        const products = await Model.find(filter).select("-__v").populate({path: "creatorId", select: "username email"})
+        const products = await Model.find(filter).sort({createdAt: -1})
+                                                .select("-__v").populate({path: "creatorId", select: "username email"})
                                                     .populate({path: "category", select: "name"});
 
         res.status(200).json(products)
@@ -60,7 +61,7 @@ const getAllProduct = async (req, res) => {
 }
 
 const getSingle = async (req, res) => {
-    const {id} = req.body
+    const {id} = req.params;
     try {
         const product = await productModel.findById(id).select("-__v").populate({path: "creatorId", select: "username email"})
                                                         .populate({path: "category", select: "name"});
