@@ -30,7 +30,7 @@ const updateCategory = async (req, res) => {
             return res.status(404).json({success: false, error: "category not found"});
         }
 
-        await categoryModel.findByIdAndUpdate(id, {...others}, {new: true});
+        await categoryModel.findByIdAndUpdate(id, {name, ...others}, {new: true});
         res.status(200).json({success: true, message: "category updated"});
     } catch (err) {
         res.status(500).json(err.message);
